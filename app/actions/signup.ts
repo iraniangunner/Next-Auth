@@ -44,5 +44,5 @@ export async function signup(state: FormState, formData: any) {
   // 4. Create user session
   //  await createSession(user.id)
   // 5. Redirect user
-  //   redirect("/profile");
+  //   redirect("/dashboard");
 }
