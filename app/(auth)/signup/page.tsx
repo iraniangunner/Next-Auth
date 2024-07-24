@@ -1,7 +1,7 @@
 "use client";
 import { useActionState } from "react";
 import Link from "next/link";
-import { signup } from "@/app/actions/auth";
+import { signup } from "@/app/actions/signup";
 
 export function SignupForm() {
   const [state, action, pending] = useActionState(signup, undefined);
