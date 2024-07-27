@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { SessionContext } from "../lib/provider";
+import { SessionContext } from "../provider/sessionProvider";
 
 export default function Dashboard() {
 
