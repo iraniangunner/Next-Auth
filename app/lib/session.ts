@@ -1,4 +1,4 @@
-import "server-only";
+// import "server-only";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 // import { SessionPayload } from "@/app/lib/definitions";
@@ -6,13 +6,13 @@ import { cookies } from "next/headers";
 const secretKey = process.env.SESSION_SECRET;
 const encodedKey = new TextEncoder().encode(secretKey);
 
-export async function encrypt(payload: any) {
-  return new SignJWT(payload)
-    .setProtectedHeader({ alg: "HS256" })
-    .setIssuedAt()
-    .setExpirationTime("7d")
-    .sign(encodedKey);
-}
+// export async function encrypt(payload: any) {
+//   return new SignJWT(payload)
+//     .setProtectedHeader({ alg: "HS256" })
+//     .setIssuedAt()
+//     .setExpirationTime("7d")
+//     .sign(encodedKey);
+// }
 
 export async function decrypt(session: string | undefined = "") {
   try {
@@ -25,43 +25,76 @@ export async function decrypt(session: string | undefined = "") {
   }
 }
 
-export async function createSession(userId: string) {
-  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-  const session = await encrypt({ userId, expiresAt });
+// export async function createSession(userId: string) {
+//   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+//   const session = await encrypt({ userId, expiresAt });
 
-  cookies().set("session", session, {
+//   cookies().set("session", session, {
+//     httpOnly: true,
+//     secure: process.env.NODE_ENV === "production",
+//     expires: expiresAt,
+//     sameSite: "lax",
+//     path: "/",
+//   });
+// }
+
+export function createSession(token: string) {
+  // const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  // const session = await encrypt({ token, expiresAt });
+
+  cookies().set("session", token, {
     httpOnly: true,
-    secure: true,
-    expires: expiresAt,
+    secure: process.env.NODE_ENV === "production",
+    // expires: expiresAt,
     sameSite: "lax",
     path: "/",
   });
 }
 
-export async function updateSession() {
-  const session = cookies().get("session")?.value;
-  const payload = await decrypt(session);
+// export async function updateSession() {
+//   const session = cookies().get("session")?.value;
+//   const payload = await decrypt(session);
 
-  if (!session || !payload) {
+//   if (!session || !payload) {
+//     return null;
+//   }
+
+//   const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+//   cookies().set("session", session, {
+//     httpOnly: true,
+//     secure: true,
+//     expires: expires,
+//     sameSite: "lax",
+//     path: "/",
+//   });
+// }
+
+export async function getSession() {
+  const token = cookies().get("session")?.value;
+
+  if (!token) return null;
+
+  const res =
+    /* providing token in bearer */
+    await fetch("https://dummyjson.com/auth/me", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+  if (!res.ok) {
     return null;
   }
 
-  const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-  cookies().set("session", session, {
-    httpOnly: true,
-    secure: true,
-    expires: expires,
-    sameSite: "lax",
-    path: "/",
-  });
+  const user = await res.json();
+
+  return({user,token})
+  // .then(res => res.json())
+  // .then(console.log);
+  // return await decrypt(session);
 }
 
-export async function getSession() {
-  const session = cookies().get("session")?.value;
-  if (!session) return null;
-  return await decrypt(session);
-}
-
-export function deleteSession() {
-  cookies().delete("session");
-}
+// export function deleteSession() {
+//   cookies().delete("session");
+// }

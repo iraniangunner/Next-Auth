@@ -1,9 +1,27 @@
+"use client";
+import { login } from "@/app/actions/login";
+import { useFormState } from "react-dom";
 import Link from "next/link";
+import { signup } from "@/app/actions/signup";
+import { redirect } from "next/navigation";
 
 export default function Login() {
+  // const [error , dispatch] = useFormState(login, undefined);
+  async function handlesubmit(formData:FormData) {
+    // "use server"
+    const username = formData.get("username");
+
+    const password = formData.get("password");
+
+    login({
+      username,
+      password,
+      redirectTo:"/dashboard"
+    })
+  }
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+      {/* <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <a
           href="#"
           className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
@@ -98,7 +116,19 @@ export default function Login() {
             </form>
           </div>
         </div>
-      </div>
+      </div> */}
+      <form
+        action={handlesubmit}
+      >
+        <input type="text" name="username" placeholder="username" required />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+        />
+        <button type="submit">Login</button>
+      </form>
     </section>
   );
 }
