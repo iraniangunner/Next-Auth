@@ -7,8 +7,7 @@ import { redirect } from "next/navigation";
 
 export default function Login() {
   // const [error , dispatch] = useFormState(login, undefined);
-  async function handlesubmit(formData:FormData) {
-    // "use server"
+  async function handlesubmit(formData: FormData) {
     const username = formData.get("username");
 
     const password = formData.get("password");
@@ -16,12 +15,12 @@ export default function Login() {
     login({
       username,
       password,
-      redirectTo:"/dashboard"
-    })
+      redirectTo: "/dashboard",
+    });
   }
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
-      {/* <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <a
           href="#"
           className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
@@ -38,21 +37,21 @@ export default function Login() {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Sign in to your account
             </h1>
-            <form className="space-y-4 md:space-y-6" action="#">
+            <form className="space-y-4 md:space-y-6" action={handlesubmit}>
               <div>
                 <label
-                  htmlFor="email"
+                  htmlFor="username"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  Your email
+                  Your username
                 </label>
                 <input
-                  type="email"
-                  name="email"
-                  id="email"
+                  type="text"
+                  name="username"
+                  id="username"
                   className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="name@company.com"
-                  required
+                  // required
                 />
               </div>
               <div>
@@ -116,19 +115,7 @@ export default function Login() {
             </form>
           </div>
         </div>
-      </div> */}
-      <form
-        action={handlesubmit}
-      >
-        <input type="text" name="username" placeholder="username" required />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          required
-        />
-        <button type="submit">Login</button>
-      </form>
+      </div>
     </section>
   );
 }
