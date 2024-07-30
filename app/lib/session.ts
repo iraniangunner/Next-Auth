@@ -1,4 +1,4 @@
-// import "server-only";
+import "server-only";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 // import { SessionPayload } from "@/app/lib/definitions";
@@ -95,6 +95,6 @@ export async function getSession() {
   // return await decrypt(session);
 }
 
-// export function deleteSession() {
-//   cookies().delete("session");
-// }
+export function deleteSession() {
+  cookies().delete("session");
+}

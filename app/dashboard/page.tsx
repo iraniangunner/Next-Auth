@@ -1,3 +1,4 @@
+import LogoutButton from "../components/logoutButton";
 import { getSession } from "../lib/session";
 import { redirect } from "next/navigation";
 
@@ -13,7 +14,11 @@ export default async function Dashboard() {
       {user.username}
       <br />
       {user.email}
+      <br />
+      {user.gender}
+      <br />
       <h1>Hello</h1>
+      <LogoutButton />
     </div>
   );
 }

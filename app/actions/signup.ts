@@ -1,3 +1,4 @@
+"use server";
 import { SignupFormSchema, FormState } from "@/app/lib/definitions";
 import { redirect } from "next/navigation";
 
