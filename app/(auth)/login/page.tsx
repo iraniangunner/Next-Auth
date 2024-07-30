@@ -2,22 +2,26 @@
 import { login } from "@/app/actions/login";
 import { useFormState } from "react-dom";
 import Link from "next/link";
-import { signup } from "@/app/actions/signup";
-import { redirect } from "next/navigation";
+import { useFormStatus } from "react-dom";
+import LoadingSpinner from "@/app/components/loadingSpinner";
 
 export default function Login() {
-  // const [error , dispatch] = useFormState(login, undefined);
-  async function handlesubmit(formData: FormData) {
-    const username = formData.get("username");
+  const [state, dispatch] = useFormState(login, undefined);
 
-    const password = formData.get("password");
+  function SubmitButton() {
+    const { pending } = useFormStatus();
 
-    login({
-      username,
-      password,
-      redirectTo: "/dashboard",
-    });
+    return (
+      <button
+        type="submit"
+        disabled={pending}
+        className="w-full text-white flex justify-center items-center bg-blue-500 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+      >
+        {pending ? <LoadingSpinner /> : "Sign in"}
+      </button>
+    );
   }
+
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -37,7 +41,7 @@ export default function Login() {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Sign in to your account
             </h1>
-            <form className="space-y-4 md:space-y-6" action={handlesubmit}>
+            <form className="space-y-4 md:space-y-6" action={dispatch}>
               <div>
                 <label
                   htmlFor="username"
@@ -97,12 +101,14 @@ export default function Login() {
                   Forgot password?
                 </Link>
               </div>
-              <button
+              {/* <button
                 type="submit"
                 className="w-full text-white bg-blue-500 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               >
                 Sign in
-              </button>
+              </button> */}
+              <SubmitButton />
+              {state?.message}
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Don’t have an account yet?{" "}
                 <Link
