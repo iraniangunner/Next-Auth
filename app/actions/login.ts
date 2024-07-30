@@ -3,12 +3,11 @@ import { createSession } from "../lib/session";
 import { redirect } from "next/navigation";
 
 export async function login(prevState: any, formData: FormData) {
-  //1.Get user credentials
+//1.Get user credentials
   const username = formData.get("username");
   const password = formData.get("password");
 
-  //2.Send credentials to server
-
+//2.Send credentials to server
   const response = await fetch("https://dummyjson.com/auth/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -24,11 +23,12 @@ export async function login(prevState: any, formData: FormData) {
     };
   }
 
+//3.get user information from server
   const user = await response.json();
 
-  //3.create cookie session and save token
+//4.create cookie session and save token
   createSession(user.token);
-
-  //4.redirect to dashboard
+  
+//5.redirect to dashboard
   redirect("/dashboard");
 }
