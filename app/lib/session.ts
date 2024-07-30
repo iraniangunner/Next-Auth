@@ -39,13 +39,13 @@ export async function decrypt(session: string | undefined = "") {
 // }
 
 export function createSession(token: string) {
-  // const expiresAt = new Date(Date.now());
+  const expiresAt = new Date(Date.now() + 10 * 1000);
   // const session = await encrypt({ token, expiresAt });
 
   cookies().set("session", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    // expires: expiresAt,
+    expires: expiresAt,
     sameSite: "lax",
     path: "/",
   });
@@ -89,7 +89,7 @@ export async function getSession() {
 
   const user = await res.json();
 
-  return({user,token})
+  return { user, token };
   // .then(res => res.json())
   // .then(console.log);
   // return await decrypt(session);
