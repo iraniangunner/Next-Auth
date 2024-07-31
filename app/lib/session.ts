@@ -114,9 +114,9 @@ export async function getSession() {
 
   const user = await res.json();
 
-  if (typeof window !== "undefined") {
-    localStorage.setItem("token", user.refreshToken);
-  }
+  // if (typeof window !== "undefined") {
+  //   localStorage.setItem("token", user.refreshToken);
+  // }
 
   // localStorage.setItem("token", user.refreshToken);
 
