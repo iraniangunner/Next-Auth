@@ -1,18 +1,18 @@
 import "server-only";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
-// import { SessionPayload } from "@/app/lib/definitions";
+import { redirect } from "next/navigation";
 
 const secretKey = process.env.SESSION_SECRET;
 const encodedKey = new TextEncoder().encode(secretKey);
 
-// export async function encrypt(payload: any) {
-//   return new SignJWT(payload)
-//     .setProtectedHeader({ alg: "HS256" })
-//     .setIssuedAt()
-//     .setExpirationTime("7d")
-//     .sign(encodedKey);
-// }
+export async function encrypt(payload: any) {
+  return new SignJWT(payload)
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime("7d")
+    .sign(encodedKey);
+}
 
 export async function decrypt(session: string | undefined = "") {
   try {
@@ -25,24 +25,11 @@ export async function decrypt(session: string | undefined = "") {
   }
 }
 
-// export async function createSession(userId: string) {
-//   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-//   const session = await encrypt({ userId, expiresAt });
-
-//   cookies().set("session", session, {
-//     httpOnly: true,
-//     secure: process.env.NODE_ENV === "production",
-//     expires: expiresAt,
-//     sameSite: "lax",
-//     path: "/",
-//   });
-// }
-
-export function createSession(token: string) {
+export async function createSession(token: string) {
   const expiresAt = new Date(Date.now() + 10 * 1000);
-  // const session = await encrypt({ token, expiresAt });
+  const session = await encrypt({ token, expiresAt });
 
-  cookies().set("session", token, {
+  cookies().set("session", session, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     expires: expiresAt,
@@ -51,35 +38,73 @@ export function createSession(token: string) {
   });
 }
 
-// export async function updateSession() {
-//   const session = cookies().get("session")?.value;
-//   const payload = await decrypt(session);
+export async function updateSession(token: string) {
+  // const session = cookies().get("session")?.value;
+  // const payload = await decrypt(session);
 
-//   if (!session || !payload) {
-//     return null;
-//   }
+  // if (!session || !payload) {
+  //   return null;
+  // }
 
-//   const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-//   cookies().set("session", session, {
-//     httpOnly: true,
-//     secure: true,
-//     expires: expires,
-//     sameSite: "lax",
-//     path: "/",
-//   });
-// }
+  // const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  // cookies().set("session", session, {
+  //   httpOnly: true,
+  //   secure: true,
+  //   expires: expires,
+  //   sameSite: "lax",
+  //   path: "/",
+  // });
+  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  const session = await encrypt({ token, expiresAt });
+
+  cookies().set("session", session, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    expires: expiresAt,
+    sameSite: "lax",
+    path: "/",
+  });
+}
 
 export async function getSession() {
-  const token = cookies().get("session")?.value;
+  const session = cookies().get("session")?.value;
+  const payload = await decrypt(session);
+  if (!payload) return null;
 
-  if (!token) return null;
+  //1.fetch refresh token to get new access token
+  //2.update session with new access token
+  //3.if new access token expired then redirect to login page
+
+  // if (!session || !payload) {
+  //   const res = await fetch("https://dummyjson.com/auth/refresh", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       refreshToken:
+  //         typeof window !== "undefined" ? localStorage.getItem("token") : "",
+  //       // expiresInMins: 30, // optional, defaults to 60
+  //     }),
+  //   });
+
+  //   if (res.status === 401) {
+  //     if (typeof window !== "undefined") {
+  //       localStorage.removeItem("token");
+  //     }
+
+  //     redirect("/login");
+  //   }
+  //   const data = await res.json();
+  //   await updateSession(data.accessToken);
+  // }
 
   const res =
     /* providing token in bearer */
     await fetch("https://dummyjson.com/auth/me", {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${payload?.token}`,
       },
     });
 
@@ -89,10 +114,13 @@ export async function getSession() {
 
   const user = await res.json();
 
-  return { user, token };
-  // .then(res => res.json())
-  // .then(console.log);
-  // return await decrypt(session);
+  if (typeof window !== "undefined") {
+    localStorage.setItem("token", user.refreshToken);
+  }
+
+  // localStorage.setItem("token", user.refreshToken);
+
+  return { user };
 }
 
 export function deleteSession() {
