@@ -71,34 +71,6 @@ export async function getSession() {
   const payload = await decrypt(session);
   if (!payload) return null;
 
-  //1.fetch refresh token to get new access token
-  //2.update session with new access token
-  //3.if new access token expired then redirect to login page
-
-  // if (!session || !payload) {
-  //   const res = await fetch("https://dummyjson.com/auth/refresh", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       refreshToken:
-  //         typeof window !== "undefined" ? localStorage.getItem("token") : "",
-  //       // expiresInMins: 30, // optional, defaults to 60
-  //     }),
-  //   });
-
-  //   if (res.status === 401) {
-  //     if (typeof window !== "undefined") {
-  //       localStorage.removeItem("token");
-  //     }
-
-  //     redirect("/login");
-  //   }
-  //   const data = await res.json();
-  //   await updateSession(data.accessToken);
-  // }
-
   const res =
     /* providing token in bearer */
     await fetch("https://dummyjson.com/auth/me", {
