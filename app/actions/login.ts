@@ -30,5 +30,5 @@ export async function login(prevState: any, formData: FormData) {
   await createSession(user.token);
 
   //5.redirect to dashboard
-  redirect("/dashboard");
+  redirect("/");
 }

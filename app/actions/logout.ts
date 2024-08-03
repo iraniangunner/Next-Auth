@@ -4,5 +4,5 @@ import { redirect } from "next/navigation";
 
 export async function logout() {
   deleteSession();
-  redirect("/login");
+  // redirect("/login");
 }
