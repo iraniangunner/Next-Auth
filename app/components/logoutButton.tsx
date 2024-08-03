@@ -1,6 +1,9 @@
 "use client";
+import { DropdownItem } from "flowbite-react";
 import { logout } from "../actions/logout";
 
 export default function LogoutButton() {
-  return <button onClick={async () => await logout()}>logout</button>;
+  return (
+    <DropdownItem onClick={async () => await logout()}>Sign out</DropdownItem>
+  );
 }
