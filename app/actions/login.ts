@@ -27,7 +27,7 @@ export async function login(prevState: any, formData: FormData) {
   const user = await response.json();
 
   //4.create cookie session and save token
-  createSession(user.token);
+  await createSession(user.token);
 
   //5.redirect to dashboard
   redirect("/dashboard");
