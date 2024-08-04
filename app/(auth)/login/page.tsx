@@ -1,9 +1,9 @@
 "use client";
-import { login } from "@/app/actions/login";
+import { login } from "@/actions/login";
 import { useFormState } from "react-dom";
 import Link from "next/link";
 import { useFormStatus } from "react-dom";
-import LoadingSpinner from "@/app/components/loadingSpinner";
+import LoadingSpinner from "@/components/loadingSpinner";
 
 export default function Login() {
   const [state, dispatch] = useFormState(login, undefined);

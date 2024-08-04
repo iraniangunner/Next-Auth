@@ -1,5 +1,5 @@
 "use server";
-import { SignupFormSchema, FormState } from "@/app/lib/definitions";
+import { SignupFormSchema, FormState } from "@/lib/definitions";
 
 export async function signup(state: FormState, formData: any) {
   // 1.Validate form fields

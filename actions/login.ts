@@ -1,5 +1,5 @@
 "use server";
-import { createSession } from "../lib/session";
+import { createSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 
 export async function login(prevState: any, formData: FormData) {
