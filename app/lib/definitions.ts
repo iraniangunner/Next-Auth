@@ -27,14 +27,3 @@ export type FormState =
       message?: string;
     }
   | undefined;
-
-// export const SessionPayloadSchema = z.object({
-//   userId: z.string(),
-//   //   sessionId: z.string(),
-//   expiresAt: z.string().refine((date) => !isNaN(Date.parse(date)), {
-//     message: "Expiry must be a valid date string.",
-//   }),
-// });
-
-// // Export the Session Payload Schema
-// export type SessionPayload = z.infer<typeof SessionPayloadSchema>;

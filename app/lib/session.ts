@@ -1,7 +1,6 @@
 import "server-only";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 const secretKey = process.env.SESSION_SECRET;
 const encodedKey = new TextEncoder().encode(secretKey);
@@ -40,28 +39,19 @@ export async function createSession(token: string) {
 }
 
 export async function updateSession(token: string) {
-  // const session = cookies().get("session")?.value;
-  // const payload = await decrypt(session);
+  const session = cookies().get("session")?.value;
+  const payload = await decrypt(session);
 
-  // if (!session || !payload) {
-  //   return null;
-  // }
+  if (!session || !payload) {
+    return null;
+  }
 
-  // const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-  // cookies().set("session", session, {
-  //   httpOnly: true,
-  //   secure: true,
-  //   expires: expires,
-  //   sameSite: "lax",
-  //   path: "/",
-  // });
-  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-  const session = await encrypt({ token, expiresAt });
-
-  cookies().set("session", session, {
+  const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  const newSession = await encrypt({ token, expires });
+  cookies().set("session", newSession, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    expires: expiresAt,
+    secure: true,
+    expires: expires,
     sameSite: "lax",
     path: "/",
   });
@@ -86,12 +76,6 @@ export async function getSession() {
   }
 
   const user = await res.json();
-
-  // if (typeof window !== "undefined") {
-  //   localStorage.setItem("token", user.refreshToken);
-  // }
-
-  // localStorage.setItem("token", user.refreshToken);
 
   return { user };
 }

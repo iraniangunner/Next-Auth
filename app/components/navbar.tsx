@@ -12,14 +12,11 @@ import {
   NavbarToggle,
 } from "flowbite-react";
 import LogoutButton from "./logoutButton";
-import { redirect } from "next/navigation";
 import Link from "next/link";
 
 export default async function NavBar() {
   const session = await getSession();
-  // if (!session) {
-  //   redirect("/login");
-  // }
+
   const user = session?.user;
   return (
     <Navbar fluid rounded>

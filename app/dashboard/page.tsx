@@ -1,8 +1,5 @@
-import LogoutButton from "../components/logoutButton";
 import { getSession } from "../lib/session";
 import { redirect } from "next/navigation";
-import { updateSession } from "../lib/session";
-import Image from "next/image";
 
 export default async function Dashboard() {
   const session = await getSession();
