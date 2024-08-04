@@ -43,8 +43,11 @@ export default async function Dashboard() {
   }
   const user = session?.user;
   return (
-    <section className="bg-gray-50 dark:bg-gray-900 h-screen">
-      <h1>This is dashboard page</h1>
+    <section className="bg-gray-50 dark:bg-gray-900 h-screen p-6">
+      <p className="mb-2">Phone Number : {user?.phone}</p>
+      <p className="mb-2">Birthdate : {user?.birthDate}</p>
+      <p className="mb-2">Age : {user?.age}</p>
+      <p className="mb-2">University : {user?.university}</p>
     </section>
   );
 }
