@@ -1,7 +1,7 @@
 "use client";
 import { useFormState } from "react-dom";
 import Link from "next/link";
-import { signup } from "@/actions/signup";
+import { signup } from "@/lib/actions/signup";
 
 export default function SignupForm() {
   const [state, action, pending] = useFormState(signup, undefined);

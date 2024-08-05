@@ -8,7 +8,6 @@ export async function login(prevState: any, formData: FormData) {
   const password = formData.get("password");
 
   //2.Send credentials to server
-
   try {
     const response = await fetch("https://dummyjson.com/auth/login", {
       method: "POST",
