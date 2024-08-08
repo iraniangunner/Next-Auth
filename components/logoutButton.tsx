@@ -1,6 +1,6 @@
 "use client";
 import { DropdownItem } from "flowbite-react";
-import { logout } from "../lib/actions/logout";
+import { logout } from "../actions/logout";
 
 export default function LogoutButton() {
   return (

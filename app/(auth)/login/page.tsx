@@ -1,5 +1,5 @@
 "use client";
-import { login } from "@/lib/actions/login";
+import { login } from "@/actions/login";
 import { useFormState } from "react-dom";
 import Link from "next/link";
 import { useFormStatus } from "react-dom";
